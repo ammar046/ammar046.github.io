@@ -13,6 +13,9 @@ minima:
   social_links:
     - { platform: github, user_url: "https://github.com/ammar046" }
 
+# Homepage + post list feel more like a modern blog.
+show_excerpts: true
+
 permalink: /:categories/:year/:month/:day/:title/
 timezone: "Etc/UTC"
 markdown: kramdown

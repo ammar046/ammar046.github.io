@@ -1,0 +1,63 @@
+---
+layout: default
+---
+
+<div class="hero">
+  <div class="hero__inner">
+    <p class="hero__kicker">Technical notes</p>
+    <h1 class="hero__title">{{ site.title | escape }}</h1>
+    {% if site.description %}
+      <p class="hero__subtitle">{{ site.description | escape }}</p>
+    {% endif %}
+
+    <div class="hero__meta">
+      <a class="btn btn--primary" href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      <a class="btn btn--ghost" href="https://github.com/ammar046" rel="me">GitHub</a>
+    </div>
+  </div>
+</div>
+
+<main class="page-content" aria-label="Content">
+  <div class="wrapper">
+    {% if content %}
+      <div class="home-intro">
+        {{ content }}
+      </div>
+    {% endif %}
+
+    <section class="post-grid" aria-label="Posts">
+      {% for post in site.posts %}
+        <article class="post-card">
+          <a class="post-card__link" href="{{ post.url | relative_url }}">
+            <div class="post-card__top">
+              <h2 class="post-card__title">{{ post.title | escape }}</h2>
+              <p class="post-card__date">
+                <time datetime="{{ post.date | date_to_xmlschema }}">
+                  {{ post.date | date: "%b %-d, %Y" }}
+                </time>
+              </p>
+            </div>
+
+            {% if post.excerpt %}
+              <div class="post-card__excerpt">
+                {{ post.excerpt }}
+              </div>
+            {% endif %}
+
+            <div class="post-card__footer">
+              <span class="post-card__read">Read →</span>
+              {% if post.categories %}
+                <span class="post-card__tags">
+                  {% for cat in post.categories limit:3 %}
+                    <span class="tag">{{ cat }}</span>
+                  {% endfor %}
+                </span>
+              {% endif %}
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    </section>
+  </div>
+</main>
+
