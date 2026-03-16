@@ -154,8 +154,20 @@ a {
   top: 0;
   z-index: 20;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(5, 7, 14, 0.55);
+  background: rgba(5, 7, 14, 0.46);
   backdrop-filter: blur(12px);
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.65), rgba(34, 197, 94, 0.45), transparent);
+  opacity: 0.65;
+  pointer-events: none;
 }
 
 .topbar__inner {
@@ -166,9 +178,43 @@ a {
 }
 
 .brand {
-  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
   text-decoration: none;
   letter-spacing: -0.02em;
+}
+
+.brand__mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.96);
+  background: radial-gradient(circle at 30% 30%, rgba(124, 58, 237, 1), rgba(79, 70, 229, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 26px rgba(124, 58, 237, 0.18);
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brand__name {
+  font-size: 0.98rem;
+  letter-spacing: -0.03em;
+}
+
+.brand__handle {
+  font-size: 0.85rem;
+  color: var(--muted2);
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .nav {
@@ -178,13 +224,24 @@ a {
 
 .nav__link {
   text-decoration: none;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.84);
+  font-weight: 900;
+  font-size: 0.92rem;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
 }
 
 .nav__link:hover {
-  color: var(--text);
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.nav__link:active {
+  transform: translateY(0);
 }
 
 /* Hero */
