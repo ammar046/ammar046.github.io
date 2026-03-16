@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Writing a Unix Shell in C Without AI — Learning the Hard Way</title>
+    <title>Scooby’s Blog</title>
     <link>https://ammar046.github.io/</link>
     <description>Notes from building low-level systems software the slow way: man pages, gdb, valgrind, and mistakes.</description>
     <language>en</language>
