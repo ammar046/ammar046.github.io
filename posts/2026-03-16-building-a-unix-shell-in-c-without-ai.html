@@ -1,122 +1,126 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
 
-    <title>Building a Unix Shell in C Without AI — Learning the Hard Way · Scooby’s Blog</title>
-    <meta
-      name="description"
-      content="Phase 1: command loop, built-ins, PATH search, fork/exec, the strtok() trap, and debugging with GDB/Valgrind."
-    />
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FHBLR4RL59"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-    <meta property="og:title" content="Building a Unix Shell in C Without AI — Learning the Hard Way" />
-    <meta
-      property="og:description"
-      content="Phase 1: command loop, built-ins, PATH search, fork/exec, the strtok() trap, and debugging with GDB/Valgrind."
-    />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ammar046.github.io/posts/2026-03-16-building-a-unix-shell-in-c-without-ai.html" />
+    gtag('config', 'G-FHBLR4RL59');
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+  <title>Building a Unix Shell in C Without AI — Learning the Hard Way · Scooby’s Blog</title>
+  <meta name="description"
+    content="Phase 1: command loop, built-ins, PATH search, fork/exec, the strtok() trap, and debugging with GDB/Valgrind." />
 
-    <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="Building a Unix Shell in C Without AI — Learning the Hard Way" />
+  <meta property="og:description"
+    content="Phase 1: command loop, built-ins, PATH search, fork/exec, the strtok() trap, and debugging with GDB/Valgrind." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url"
+    content="https://ammar046.github.io/posts/2026-03-16-building-a-unix-shell-in-c-without-ai.html" />
 
-    <!-- Prism for code highlighting (no build step) -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css"
-    />
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
 
-    <script defer src="../assets/site.js"></script>
-  </head>
-  <body>
-    <div class="bg" aria-hidden="true">
-      <div class="bg__grain"></div>
-      <div class="bg__blob bg__blob--a"></div>
-      <div class="bg__blob bg__blob--b"></div>
-      <div class="bg__blob bg__blob--c"></div>
+  <link rel="stylesheet" href="../assets/site.css" />
+
+  <!-- Prism for code highlighting (no build step) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+
+  <script defer src="../assets/site.js"></script>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg__grain"></div>
+    <div class="bg__blob bg__blob--a"></div>
+    <div class="bg__blob bg__blob--b"></div>
+    <div class="bg__blob bg__blob--c"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="../" aria-label="Home">
+        <span class="brand__mark" aria-hidden="true">S</span>
+        <span class="brand__text">
+          <span class="brand__name">Scooby</span>
+          <span class="brand__handle">@ammar046</span>
+        </span>
+      </a>
+      <nav class="nav">
+        <a class="nav__link" href="https://github.com/ammar046" rel="me">GitHub</a>
+        <a class="nav__link" href="../rss.xml">RSS</a>
+      </nav>
     </div>
+  </header>
 
-    <header class="topbar">
-      <div class="wrap topbar__inner">
-        <a class="brand" href="../" aria-label="Home">
-          <span class="brand__mark" aria-hidden="true">S</span>
-          <span class="brand__text">
-            <span class="brand__name">Scooby</span>
-            <span class="brand__handle">@ammar046</span>
-          </span>
-        </a>
-        <nav class="nav">
-          <a class="nav__link" href="https://github.com/ammar046" rel="me">GitHub</a>
-          <a class="nav__link" href="../rss.xml">RSS</a>
-        </nav>
-      </div>
-    </header>
+  <main class="wrap page">
+    <a class="crumbs reveal" href="../">← Back</a>
 
-    <main class="wrap page">
-      <a class="crumbs reveal" href="../">← Back</a>
+    <article class="post reveal">
+      <header>
+        <h1>Building a Unix Shell in C Without AI — Learning the Hard Way</h1>
+        <div class="post__meta">
+          <time datetime="2026-03-16">Mar 16, 2026</time>
+          <span class="dot"></span>
+          <span>systems</span>
+          <span>·</span>
+          <span>c</span>
+          <span>·</span>
+          <span>unix</span>
+        </div>
+      </header>
 
-      <article class="post reveal">
-        <header>
-          <h1>Building a Unix Shell in C Without AI — Learning the Hard Way</h1>
-          <div class="post__meta">
-            <time datetime="2026-03-16">Mar 16, 2026</time>
-            <span class="dot"></span>
-            <span>systems</span>
-            <span>·</span>
-            <span>c</span>
-            <span>·</span>
-            <span>unix</span>
-          </div>
-        </header>
+      <div class="prose">
+        <p>I wanted to understand how a Unix shell actually works under the hood.</p>
+        <p>Not from lecture slides. Not from a polished tutorial. And definitely not from auto-generated code.</p>
+        <p>
+          So I decided to build one from scratch in C. I picked a shell specifically because it sits right at the
+          boundary between user-space and the operating system — every command you type goes through this one small
+          program before the kernel ever sees it. I wanted to know exactly what happens in that gap.
+        </p>
 
-        <div class="prose">
-          <p>I wanted to understand how a Unix shell actually works under the hood.</p>
-          <p>Not from lecture slides. Not from a polished tutorial. And definitely not from auto-generated code.</p>
-          <p>
-            So I decided to build one from scratch in C. I picked a shell specifically because it sits right at the
-            boundary between user-space and the operating system — every command you type goes through this one small
-            program before the kernel ever sees it. I wanted to know exactly what happens in that gap.
-          </p>
+        <p>There was one rule for the entire project:</p>
+        <ul>
+          <li>No AI assistance for writing the code.</li>
+          <li>No Copilot. No ChatGPT. No autocomplete writing logic for me.</li>
+        </ul>
 
-          <p>There was one rule for the entire project:</p>
-          <ul>
-            <li>No AI assistance for writing the code.</li>
-            <li>No Copilot. No ChatGPT. No autocomplete writing logic for me.</li>
-          </ul>
+        <p>If something broke, the workflow was simple:</p>
+        <ul>
+          <li>Read the man page</li>
+          <li>Compile again</li>
+          <li>Run gdb</li>
+          <li>Inspect memory</li>
+          <li>Repeat until the program stopped crashing</li>
+        </ul>
 
-          <p>If something broke, the workflow was simple:</p>
-          <ul>
-            <li>Read the man page</li>
-            <li>Compile again</li>
-            <li>Run gdb</li>
-            <li>Inspect memory</li>
-            <li>Repeat until the program stopped crashing</li>
-          </ul>
+        <p>
+          This post covers Phase 1 — building the basic command loop, implementing a few built-ins, launching programs
+          using the fork–exec model, and surviving the first wave of segmentation faults.
+        </p>
 
-          <p>
-            This post covers Phase 1 — building the basic command loop, implementing a few built-ins, launching programs
-            using the fork–exec model, and surviving the first wave of segmentation faults.
-          </p>
+        <h2>The Shell Loop</h2>
+        <p>Every shell starts with the same idea: <strong>read → parse → execute → repeat</strong>.</p>
+        <p>
+          My shell loop reads input, tokenizes it, checks for built-in commands, and otherwise tries to execute a
+          program from <code>$PATH</code>.
+        </p>
 
-          <h2>The Shell Loop</h2>
-          <p>Every shell starts with the same idea: <strong>read → parse → execute → repeat</strong>.</p>
-          <p>
-            My shell loop reads input, tokenizes it, checks for built-in commands, and otherwise tries to execute a
-            program from <code>$PATH</code>.
-          </p>
-
-          <pre><code class="language-c">printf("$ ");
+        <pre><code class="language-c">printf("$ ");
 char input[100];
 
 while (fgets(input, sizeof(input), stdin))
@@ -129,52 +133,52 @@ while (fgets(input, sizeof(input), stdin))
     char *cmd = strtok(input, " ");
 }</code></pre>
 
-          <p>
-            One subtle but important detail here is the <strong>copy of the input string</strong> — and it only exists
-            because I learned why the hard way.
-          </p>
+        <p>
+          One subtle but important detail here is the <strong>copy of the input string</strong> — and it only exists
+          because I learned why the hard way.
+        </p>
 
-          <h2>The <code>strtok()</code> Trap</h2>
-          <p>At first I used <code>strtok()</code> directly on the input string. That seemed harmless.</p>
-          <p>
-            Then parts of my parsing logic started behaving strangely in ways I couldn't immediately explain. Commands
-            would parse correctly on their own, then silently break when other functions ran nearby.
-          </p>
-          <p>
-            The reason is that <strong><code>strtok()</code> modifies the original string</strong> by inserting null
-            terminators in place of delimiters. If the user types:
-          </p>
+        <h2>The <code>strtok()</code> Trap</h2>
+        <p>At first I used <code>strtok()</code> directly on the input string. That seemed harmless.</p>
+        <p>
+          Then parts of my parsing logic started behaving strangely in ways I couldn't immediately explain. Commands
+          would parse correctly on their own, then silently break when other functions ran nearby.
+        </p>
+        <p>
+          The reason is that <strong><code>strtok()</code> modifies the original string</strong> by inserting null
+          terminators in place of delimiters. If the user types:
+        </p>
 
-          <pre><code class="language-none">echo hello world</code></pre>
+        <pre><code class="language-none">echo hello world</code></pre>
 
-          <p>After tokenization the memory actually looks like this:</p>
-          <pre><code class="language-none">echo\0hello\0world</code></pre>
+        <p>After tokenization the memory actually looks like this:</p>
+        <pre><code class="language-none">echo\0hello\0world</code></pre>
 
-          <p>
-            The original string is destroyed. Any other part of the shell that still needed the full command string was
-            now reading garbage.
-          </p>
-          <p>The fix was simple once I understood it: tokenize a copy instead.</p>
+        <p>
+          The original string is destroyed. Any other part of the shell that still needed the full command string was
+          now reading garbage.
+        </p>
+        <p>The fix was simple once I understood it: tokenize a copy instead.</p>
 
-          <pre><code class="language-c">char *cpy = malloc(strlen(input) + 1);
+        <pre><code class="language-c">char *cpy = malloc(strlen(input) + 1);
 strcpy(cpy, input);
 
 char *cmd = strtok(input, " ");</code></pre>
 
-          <p>
-            There is also a second trap that bit me later: <code>strtok()</code> maintains global internal state. If
-            another function calls <code>strtok()</code> while the first tokenization is still in progress, the internal
-            pointer resets and the original parse breaks silently. No error. No warning. Just wrong behavior.
-          </p>
+        <p>
+          There is also a second trap that bit me later: <code>strtok()</code> maintains global internal state. If
+          another function calls <code>strtok()</code> while the first tokenization is still in progress, the internal
+          pointer resets and the original parse breaks silently. No error. No warning. Just wrong behavior.
+        </p>
 
-          <h2>Searching for Commands in <code>$PATH</code></h2>
-          <p>
-            If the command is not a shell builtin, the shell needs to locate the executable inside the directories
-            listed in the <code>PATH</code> environment variable.
-          </p>
-          <p>I implemented that using a helper function:</p>
+        <h2>Searching for Commands in <code>$PATH</code></h2>
+        <p>
+          If the command is not a shell builtin, the shell needs to locate the executable inside the directories
+          listed in the <code>PATH</code> environment variable.
+        </p>
+        <p>I implemented that using a helper function:</p>
 
-          <pre><code class="language-c">char *find_in_path(char *command)
+        <pre><code class="language-c">char *find_in_path(char *command)
 {
     char *path_env = getenv("PATH");
     if (!path_env)
@@ -184,9 +188,9 @@ char *cmd = strtok(input, " ");</code></pre>
     char *dir = strtok(path_copy, ":");
     static char result_path[4096];</code></pre>
 
-          <p>The shell iterates through each directory in <code>$PATH</code> and checks if the command exists there:</p>
+        <p>The shell iterates through each directory in <code>$PATH</code> and checks if the command exists there:</p>
 
-          <pre><code class="language-c">while (dir != NULL)
+        <pre><code class="language-c">while (dir != NULL)
 {
     snprintf(result_path, sizeof(result_path), "%s/%s", dir, command);
 
@@ -199,22 +203,22 @@ char *cmd = strtok(input, " ");</code></pre>
     dir = strtok(NULL, ":");
 }</code></pre>
 
-          <p>
-            Again, notice the copy of <code>PATH</code>. Whenever C code starts modifying strings, you quickly learn
-            that ownership of memory matters — and that the standard library will not protect you from yourself.
-          </p>
+        <p>
+          Again, notice the copy of <code>PATH</code>. Whenever C code starts modifying strings, you quickly learn
+          that ownership of memory matters — and that the standard library will not protect you from yourself.
+        </p>
 
-          <h2>The Fork–Exec Model</h2>
-          <p>The most important part of the shell is how it actually runs programs.</p>
-          <p>A shell does not run programs itself. Instead it:</p>
-          <ul>
-            <li>forks a child process</li>
-            <li>the child executes the requested program</li>
-            <li>the parent waits for the child to finish</li>
-          </ul>
-          <p>Here is the core logic:</p>
+        <h2>The Fork–Exec Model</h2>
+        <p>The most important part of the shell is how it actually runs programs.</p>
+        <p>A shell does not run programs itself. Instead it:</p>
+        <ul>
+          <li>forks a child process</li>
+          <li>the child executes the requested program</li>
+          <li>the parent waits for the child to finish</li>
+        </ul>
+        <p>Here is the core logic:</p>
 
-          <pre><code class="language-c">pid_t pid = fork();
+        <pre><code class="language-c">pid_t pid = fork();
 
 if (pid == 0)
 {
@@ -230,30 +234,30 @@ else
     wait(NULL);
 }</code></pre>
 
-          <p>
-            The first time I ran this, I expected something more complicated. Instead <code>fork()</code> just
-            duplicated the process, the child replaced itself with the new program via <code>execvp()</code>, and the
-            parent sat in <code>wait()</code> until it finished.
-          </p>
-          <p>
-            One thing I learned immediately: if the parent does not call <code>wait()</code>, the child becomes a zombie
-            process — it finishes execution but its entry stays in the process table because nothing collected its exit
-            status.
-          </p>
+        <p>
+          The first time I ran this, I expected something more complicated. Instead <code>fork()</code> just
+          duplicated the process, the child replaced itself with the new program via <code>execvp()</code>, and the
+          parent sat in <code>wait()</code> until it finished.
+        </p>
+        <p>
+          One thing I learned immediately: if the parent does not call <code>wait()</code>, the child becomes a zombie
+          process — it finishes execution but its entry stays in the process table because nothing collected its exit
+          status.
+        </p>
 
-          <h2>Building the Argument List</h2>
-          <p>Commands also need arguments, so the shell builds an argument array dynamically:</p>
+        <h2>Building the Argument List</h2>
+        <p>Commands also need arguments, so the shell builds an argument array dynamically:</p>
 
-          <pre><code class="language-c">char **args = NULL;
+        <pre><code class="language-c">char **args = NULL;
 
 args = realloc(args, (count + 1) * sizeof(char *));
 args[count] = malloc(strlen(name) + 1);
 strcpy(args[count], name);
 count++;</code></pre>
 
-          <p>Additional arguments are appended the same way:</p>
+        <p>Additional arguments are appended the same way:</p>
 
-          <pre><code class="language-c">char *arg = strtok(NULL, " ");
+        <pre><code class="language-c">char *arg = strtok(NULL, " ");
 
 while (arg != NULL)
 {
@@ -265,30 +269,30 @@ while (arg != NULL)
     arg = strtok(NULL, " ");
 }</code></pre>
 
-          <p>
-            Finally the array must be terminated with <code>NULL</code> because <code>execvp()</code> expects that
-            format:
-          </p>
+        <p>
+          Finally the array must be terminated with <code>NULL</code> because <code>execvp()</code> expects that
+          format:
+        </p>
 
-          <pre><code class="language-c">args = realloc(args, (count + 1) * sizeof(char *));
+        <pre><code class="language-c">args = realloc(args, (count + 1) * sizeof(char *));
 args[count] = NULL;</code></pre>
 
-          <h2>Debugging with GDB</h2>
-          <p>Compile with debugging symbols:</p>
-          <pre><code class="language-bash">gcc shell.c -g</code></pre>
-          <p>Then run:</p>
-          <pre><code class="language-bash">gdb ./a.out</code></pre>
-          <p>The workflow that actually helped:</p>
-          <pre><code class="language-none">break lsh_loop
+        <h2>Debugging with GDB</h2>
+        <p>Compile with debugging symbols:</p>
+        <pre><code class="language-bash">gcc shell.c -g</code></pre>
+        <p>Then run:</p>
+        <pre><code class="language-bash">gdb ./a.out</code></pre>
+        <p>The workflow that actually helped:</p>
+        <pre><code class="language-none">break lsh_loop
 run
 step
 print args</code></pre>
 
-          <h2>Finding Memory Leaks with Valgrind</h2>
-          <p>Once the shell was running, I checked it with Valgrind:</p>
-          <pre><code class="language-bash">valgrind --leak-check=full ./shell</code></pre>
-          <p>And the fix pattern:</p>
-          <pre><code class="language-c">for (int i = 0; i &lt; count; i++)
+        <h2>Finding Memory Leaks with Valgrind</h2>
+        <p>Once the shell was running, I checked it with Valgrind:</p>
+        <pre><code class="language-bash">valgrind --leak-check=full ./shell</code></pre>
+        <p>And the fix pattern:</p>
+        <pre><code class="language-c">for (int i = 0; i &lt; count; i++)
 {
     free(args[i]);
 }
@@ -296,26 +300,26 @@ print args</code></pre>
 free(args);
 free(name);</code></pre>
 
-          <h2>Phase 1 Complete</h2>
-          <p>At this point the shell can:</p>
-          <ul>
-            <li>run external commands</li>
-            <li>support basic built-ins (echo, pwd, type, exit)</li>
-            <li>resolve programs using <code>$PATH</code></li>
-            <li>execute programs using <code>fork()</code> and <code>execvp()</code></li>
-            <li>manage memory without leaks</li>
-          </ul>
+        <h2>Phase 1 Complete</h2>
+        <p>At this point the shell can:</p>
+        <ul>
+          <li>run external commands</li>
+          <li>support basic built-ins (echo, pwd, type, exit)</li>
+          <li>resolve programs using <code>$PATH</code></li>
+          <li>execute programs using <code>fork()</code> and <code>execvp()</code></li>
+          <li>manage memory without leaks</li>
+        </ul>
 
-          <p>
-            Next: pipelines, redirection, and job control.
-          </p>
-        </div>
-      </article>
+        <p>
+          Next: pipelines, redirection, and job control.
+        </p>
+      </div>
+    </article>
 
-      <footer class="footer reveal">
-        <p>© <span id="y"></span> Scooby.</p>
-      </footer>
-    </main>
-  </body>
+    <footer class="footer reveal">
+      <p>© <span id="y"></span> Scooby.</p>
+    </footer>
+  </main>
+</body>
+
 </html>
-
