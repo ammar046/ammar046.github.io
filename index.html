@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+
+    <title>Writing a Unix Shell in C Without AI — Learning the Hard Way</title>
+    <meta
+      name="description"
+      content="Notes from building low-level systems software the slow way: man pages, gdb, valgrind, and mistakes."
+    />
+
+    <meta property="og:title" content="Writing a Unix Shell in C Without AI — Learning the Hard Way" />
+    <meta
+      property="og:description"
+      content="Notes from building low-level systems software the slow way: man pages, gdb, valgrind, and mistakes."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ammar046.github.io/" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./assets/site.css" />
+    <script defer src="./assets/site.js"></script>
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true">
+      <div class="bg__grain"></div>
+      <div class="bg__blob bg__blob--a"></div>
+      <div class="bg__blob bg__blob--b"></div>
+      <div class="bg__blob bg__blob--c"></div>
+    </div>
+
+    <header class="topbar">
+      <div class="wrap topbar__inner">
+        <a class="brand" href="./">ammar046</a>
+        <nav class="nav">
+          <a class="nav__link" href="https://github.com/ammar046" rel="me">GitHub</a>
+          <a class="nav__link" href="./rss.xml">RSS</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero reveal">
+        <p class="pill">Systems • C • Unix</p>
+        <h1 class="hero__title">Writing a Unix Shell in C Without AI — Learning the Hard Way</h1>
+        <p class="hero__sub">
+          I’m building a Unix shell in C with one rule: <strong>no AI assistance</strong>. This blog documents the
+          man pages, GDB sessions, Valgrind runs, and the bugs that taught me what “under the hood” actually means.
+        </p>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="./posts/2026-03-16-building-a-unix-shell-in-c-without-ai.html">
+            Read the first post
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/ammar046">Follow on GitHub</a>
+        </div>
+      </section>
+
+      <section class="panel reveal">
+        <div class="panel__head">
+          <h2 class="panel__title">Latest</h2>
+          <p class="panel__hint">Short, technical, and honest. No filler.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card tilt">
+            <a class="card__link" href="./posts/2026-03-16-building-a-unix-shell-in-c-without-ai.html">
+              <div class="card__meta">
+                <time datetime="2026-03-16">Mar 16, 2026</time>
+                <span class="dot"></span>
+                <span>~10 min</span>
+              </div>
+              <h3 class="card__title">Building a Unix Shell in C Without AI — Learning the Hard Way</h3>
+              <p class="card__text">
+                Phase 1: command loop, built-ins, PATH search, fork/exec, the `strtok()` trap, and learning to love GDB.
+              </p>
+              <div class="card__footer">
+                <span class="tag">systems</span>
+                <span class="tag">c</span>
+                <span class="tag">unix</span>
+                <span class="spacer"></span>
+                <span class="arrow">Read →</span>
+              </div>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer reveal">
+        <p>© <span id="y"></span> ammar046. Built as a static site on GitHub Pages.</p>
+      </footer>
+    </main>
+  </body>
+</html>
+

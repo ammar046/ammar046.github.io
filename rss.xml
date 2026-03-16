@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Writing a Unix Shell in C Without AI — Learning the Hard Way</title>
+    <link>https://ammar046.github.io/</link>
+    <description>Notes from building low-level systems software the slow way: man pages, gdb, valgrind, and mistakes.</description>
+    <language>en</language>
+
+    <item>
+      <title>Building a Unix Shell in C Without AI — Learning the Hard Way</title>
+      <link>https://ammar046.github.io/posts/2026-03-16-building-a-unix-shell-in-c-without-ai.html</link>
+      <guid>https://ammar046.github.io/posts/2026-03-16-building-a-unix-shell-in-c-without-ai.html</guid>
+      <pubDate>Mon, 16 Mar 2026 00:00:00 +0000</pubDate>
+      <description><![CDATA[
+        Phase 1: command loop, built-ins, PATH search, fork/exec, the strtok() trap, and debugging with GDB/Valgrind.
+      ]]></description>
+    </item>
+  </channel>
+</rss>
+

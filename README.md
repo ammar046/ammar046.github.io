@@ -1,14 +1,13 @@
 # ammar046.github.io
 
-Technical blog powered by Jekyll + GitHub Pages.
+Technical blog powered by static HTML/CSS/JS on GitHub Pages (no Jekyll, no build step).
 
-## Local run (Windows)
+## Local preview (Windows)
 
-Install Ruby (with DevKit), then from the repo root:
+From the repo root:
 
 ```powershell
-bundle install
-bundle exec jekyll serve
+python -m http.server 8000
 ```
 
-Open `http://127.0.0.1:4000`.
+Open `http://127.0.0.1:8000`.
