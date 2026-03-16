@@ -1,0 +1,42 @@
+title: "Writing a Unix Shell in C Without AI — Learning the Hard Way"
+description: "Notes from building low-level systems software the slow way: man pages, gdb, valgrind, and mistakes."
+url: "https://ammar046.github.io"
+baseurl: ""
+
+theme: minima
+
+author:
+  name: "ammar046"
+
+minima:
+  skin: auto
+  social_links:
+    - { platform: github, user_url: "https://github.com/ammar046" }
+
+permalink: /:categories/:year/:month/:day/:title/
+timezone: "Etc/UTC"
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      author: "ammar046"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - README.md
